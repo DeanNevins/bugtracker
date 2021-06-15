@@ -1,0 +1,31 @@
+{% include 'navbar.html' %}
+{% load static %}
+<img  src="{% static employee.avatar %}" alt="Avatar Icon" width="200px">
+<h1>
+    {{ employee.displayname }}
+</h1>
+<h3>
+{% if employee.first_name and employee.last_name %}
+    {{ employee.first_name }} {{ employee.last_name }}
+{% elif employee.first_name %}
+    {{ employee.first_name }}
+{% endif %}
+
+{% if employee.first_name and employee.position %}
+    -
+{% endif%}
+
+{% if employee.position %}
+    {{ employee.position }}
+{% endif %}
+
+<br />
+
+{{ employee.email }}
+</h3>
+{% if request.user == employee %}
+    <a class="nes-btn is-primary" href="/employee/{{employee.id}}/edit/" style="margin-bottom: 10px;">Edit Profile</a>
+{% endif %}
+
+{% include 'ticket_list.html' %}
+

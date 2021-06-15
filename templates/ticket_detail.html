@@ -1,0 +1,64 @@
+{% include 'navbar.html' %}
+{% load static %}
+<div class="nes-container with-title description">
+    <p class="title nes-text is-primary">{{ ticket.id }} - {{ ticket.title }}</p>
+    
+    <table class="ticket-table" style="width:100%">
+        <col style="width:45%">
+        <col style="width:55%">       
+        <td class="ticket-info">           
+            <p>
+                {% if ticket.assigned_to %} 
+                <b>Assigned to:</b>
+                <img class="nes-avatar is-large" src="{% static ticket.assigned_to.avatar %}" alt="Avatar Icon">
+                <a class="nes-btn is-success" href="/employee/{{ticket.assigned_to.id}}/">{{ ticket.assigned_to }}</a>
+                {% endif %}
+            </p>
+            
+            <p><b>Status:</b> <b class="nes-text is-primary">{{ ticket.status }}</b></p>
+            {% if ticket.completed_by %}
+                <h3>
+                    Completed by:
+                    <img class="nes-avatar is-large" src="{% static ticket.completed_by.avatar %}" alt="Avatar Icon">
+                    <a class="nes-btn is-success" href="/employee/{{ticket.completed_by.id}}/">{{ ticket.completed_by }}</a>
+                </h3>
+            {% endif %}
+            <p><b>Submitted on:</b> <b class="nes-text is-primary">{{ ticket.date_filed }}</b></p>
+            <p>
+                <b>Reported by:</b>
+                <img class="nes-avatar is-large" src="{% static ticket.creator.avatar %}" alt="Avatar Icon"> 
+                <a class="nes-btn is-success" href="/employee/{{ticket.creator.id}}/">{{ ticket.creator }}</a>
+            </p>                
+        </td>
+        <td class="ticket-description">
+            <div class="nes-container with-title is-rounded description-container">
+                <p class="title">Description</p>
+                <p>{{ ticket.description }}</p>
+            </div>         
+        </td>
+    </table>
+</div>
+
+{% if ticket.assigned_to == request.user or not ticket.assigned_to %}
+    <div class="nes-select ticket-actions">
+    <select required id="ticket-actions" onChange="window.location.href=this.value">
+        <option value="" disabled selected hidden>Actions...</option>
+        <option class="nes-text is-primary" value="/ticket/{{ticket.id}}/edit">Edit</option>
+        {% if not ticket.assigned_to and ticket.status != "Done" %}
+            <option class="nes-text is-primary" value="/ticket/{{ticket.id}}/assign">Assign Ticket to You</option>
+        {% endif %}
+        {% if not ticket.completed_by and ticket.status != "Invalid" %}
+            <option class="nes-text is-success" value="/ticket/{{ticket.id}}/done">Complete</option>
+        {% endif %}
+        {% if return_btn %}
+            <option class="nes-text is-warning" value="/ticket/{{ticket.id}}/return">Return</option>
+        {% endif %}
+        {% if ticket.status == "Done" %}
+            <option class="nes-text is-warning" value="/ticket/{{ticket.id}}/reopen">Reopen</option>
+        {% endif %}
+        {% if ticket.status != "Invalid" %}
+            <option class="nes-text is-error" value="/ticket/{{ticket.id}}/invalid">Mark Invalid</option>
+        {% endif %}    
+    </select>
+    </div>
+{% endif %}

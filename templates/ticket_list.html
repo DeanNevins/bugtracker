@@ -1,0 +1,47 @@
+{% for collection in all_tickets %}
+{% load static %}
+<div class="nes-container with-title is-centered table-container">
+    <p class="title nes-text is-primary">{{ collection.header }}</p>
+    <div class="nes-table-responsive">                   
+        <table class="nes-table is-bordered is-centered">
+            <col style="width:5%">
+            <col style="width:40%">
+            <col style="width:20%">
+            <col style="width:20%">
+            <col style="width:15%">                    
+            <thead>
+                <th>#</th>
+                <th>Title</th>
+                <th>Assigned To</th>
+                <th>Reported By</th>
+                <th>Ticket Age</th>
+            </thead>
+            {% if collection.tickets|length == 0 %}
+                <td></td>
+                <td>N/A</td>
+            {% else %}
+                {% for ticket in collection.tickets %}
+                    <tr>
+                        <td>{{ ticket.id }}</td>
+                        <td><a class="nes-btn is-warning" href="/ticket/{{ticket.id}}/">{{ ticket.title }}</a></td>
+                        {% if ticket.assigned_to %}
+                            <td>
+                                <img class="nes-avatar is-large" src="{% static ticket.assigned_to.avatar %}" alt="Avatar Icon">
+                                <a class="nes-btn is-primary" href="/employee/{{ticket.assigned_to.id}}/">{{ ticket.assigned_to }}</a>
+                            </td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                        <td>
+                            <img class="nes-avatar is-large" src="{% static ticket.creator.avatar %}" alt="Avatar Icon">
+                            <a class="nes-btn is-success" href="/employee/{{ticket.creator.id}}/">{{ ticket.creator }}</a>
+                        </td>
+                        <td>{{ ticket.date_filed|timesince }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </table>
+    </div>
+</div>
+</div>
+{% endfor %}

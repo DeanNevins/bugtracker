@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brawlhalla Bug Tracker</title>
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/nes.css@latest/css/nes.min.css"  />
+    <link rel="stylesheet" href="{% static 'css/bugtracker.css/' %}" />
+</head>
+<body>
+    <h1 class="nes-text is-primary header-title">Brawlhalla Bug Tracker</h1>
+    <div class="nes-container with-title nav-container">
+        <p class="title">
+            {% if request.user.username %}
+                Welcome, {{ request.user }}
+            {% endif %}
+        </p>
+
+        
+        <table class="nav-table" style="width:100%">
+            <col style="width:80%">
+            <col style="width:20%">
+            <td class="nav-buttons">      
+                {% if request.user.username %}
+                    {% if request.path == '/' %}
+                    <a class="nes-btn is-success" href="/">Home</a>
+                    {% else %}
+                    <a class="nes-btn is-primary" href="/">Home</a>
+                    {% endif %}
+            
+                    {% if request.path == '/ticket/add/' %}
+                    <a class="nes-btn is-success" href="/ticket/add/">Submit Ticket</a>
+                    {% else %}
+                    <a class="nes-btn is-primary" href="/ticket/add/">Submit Ticket</a>
+                    {% endif %}
+                    
+                    {% url 'employee_detail_view' request.user.id as employee_url %}
+                    {% if request.path == employee_url  %}
+                    <a class="nes-btn is-success" href="/employee/{{request.user.id}}/">Profile</a>
+                    {% else %}
+                    <a class="nes-btn is-primary" href="/employee/{{request.user.id}}/">Profile</a>
+                    {% endif %}
+                    
+                    {% if request.path == '/employee/add/' %}
+                    <a class="nes-btn is-success" href="/employee/add/">Create New Account</a>
+                    {% else %}
+                    <a class="nes-btn is-primary" href="/employee/add/">Create New Account</a>
+                    {% endif %}
+                    
+                    {% if request.path == '/login/' %}
+                    <a class="nes-btn is-success" href="/login/">Login</a>
+                    {% else %}
+                    <a class="nes-btn is-primary" href="/login/">Login</a>
+                    {% endif %}
+                    
+                    {% if request.path == '/logout/' %}
+                    <a class="nes-btn is-success" href="/logout/">Logout</a>
+                    {% else %}
+                    <a class="nes-btn is-primary" href="/logout/">Logout</a>
+                    {% endif %}
+            
+                {% else %}
+                    <a class="nes-btn is-disabled">Home</a>
+                    <a class="nes-btn is-disabled">Submit Ticket</a>
+                    <a class="nes-btn is-disabled">Create New Account</a>
+                    <a class="nes-btn is-success" href="/login/">Login</a>
+                    <a class="nes-btn is-disabled">Logout</a>
+                
+                {% endif %}
+            </td> 
+            <td class="nav-logo">
+                <a href="/">
+                    <img class="logo" src="{% static 'images/brawlhalla_logo.png' %}" alt="Brawlhalla Logo">
+                </a>
+            </td>
+        </table>
+    </div>
+</body>
+</html>
+
+

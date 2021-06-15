@@ -1,0 +1,7 @@
+{% include 'navbar.html' %}
+<h2>{{ header }}</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="{{button_value}}" class="nes-btn is-primary">
+</form>
